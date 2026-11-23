@@ -158,9 +158,15 @@ $query = 'SELECT COUNT(*) FROM '.IMAGES_TABLE.' WHERE `latitude` IS NOT NULL and
 list($nb_geotagged) = pwg_db_fetch_array( pwg_query($query) );
 
 // Update conf if submitted in admin site
+if (isset($_POST['submit']))
+{
+  check_pwg_token();
+}
+
 if (isset($_POST['submit']) && !empty($_POST['osm_height']))
 {
 	// Check the center GPS position is valid
+  check_input_parameter('osm_left_center', $_POST, false, '/^(?:\s*[+-]?(?:\d+(?:\.\d*)?|\.\d+)\s*,\s*[+-]?(?:\d+(?:\.\d*)?|\.\d+)\s*)?$/D');
         $osm_left_center = (isset($_POST['osm_left_center']) and strlen($_POST['osm_left_center']) != 0) ? $_POST['osm_left_center'] : '0,0';
         $center_arr = explode(',', $osm_left_center);
         //print_r($center_arr);
@@ -175,15 +181,15 @@ if (isset($_POST['submit']) && !empty($_POST['osm_height']))
                 array_push($page['warnings'], l10n('The specify center longitude (-180=W to 180=E) is not valid'));
 
   //Lists
-  check_input_parameter($_POST['osm_baselayer'], $_POST, false, '/^('.implode('|', array_keys($available_baselayer)).')$/');
-  check_input_parameter($_POST['osm_zoom'], $_POST, false, '/^('.implode('|', array_keys($available_zoom)).')$/');
-  check_input_parameter($_POST['osm_add_before'], $_POST, false, '/^('.implode('|', array_keys($available_add_before)).')$/');
-  check_input_parameter($_POST['osm_cat_index'], $_POST, false, '/^('.implode('|', array_keys($available_cat_index)).')$/');
-  check_input_parameter($_POST['osm_pin'], $_POST, false, '/^('.implode('|', array_keys($available_pin)).')$/');
-  check_input_parameter($_POST['osm_left_popup'], $_POST, false, '/^('.implode('|', array_keys($available_popup)).')$/');
-  check_input_parameter($_POST['osm_left_layout'], $_POST, false, '/^('.implode('|', array_keys($available_layout)).')$/');
-  check_input_parameter($_POST['osm_left_zoom'], $_POST, false, '/^('.implode('|', array_keys($available_zoom)).')$/');
-  check_input_parameter($_POST['osm_display_gpx'], $_POST, false, '/^('.implode('|', array_keys($available_gpx)).')$/');
+  check_input_parameter('osm_baselayer', $_POST, false, '/^('.implode('|', array_keys($available_baselayer)).')$/');
+  check_input_parameter('osm_zoom', $_POST, false, '/^('.implode('|', array_keys($available_zoom)).')$/');
+  check_input_parameter('osm_add_before', $_POST, false, '/^('.implode('|', array_keys($available_add_before)).')$/');
+  check_input_parameter('osm_cat_index', $_POST, false, '/^('.implode('|', array_keys($available_cat_index)).')$/');
+  check_input_parameter('osm_pin', $_POST, false, '/^('.implode('|', array_keys($available_pin)).')$/');
+  check_input_parameter('osm_left_popup', $_POST, false, '/^('.implode('|', array_keys($available_popup)).')$/');
+  check_input_parameter('osm_left_layout', $_POST, false, '/^('.implode('|', array_keys($available_layout)).')$/');
+  check_input_parameter('osm_left_zoom', $_POST, false, '/^('.implode('|', array_keys($available_zoom)).')$/');
+  check_input_parameter('osm_display_gpx', $_POST, false, '/^('.implode('|', array_keys($available_gpx)).')$/');
 
   //Numbers
   $integers = array(
@@ -201,26 +207,29 @@ if (isset($_POST['submit']) && !empty($_POST['osm_height']))
     check_input_parameter($integer, $_POST, false, '/^\d+$/');
   }
 
-  check_input_parameter($_POST['osm_cat_width'], $_POST, false, '^auto$|^\d+$');
+  check_input_parameter('osm_cat_width', $_POST, false, '/^(?:auto|\d+)$/D');
 
-  //Strings
+  // Free-form labels and paths may be longer than the form display width.
+  $text_fields = array(
+    'osm_right_linkcss',
+    'osm_custombaselayer',
+    'osm_custombaselayerurl',
+    'osm_pinpath',
+    'osm_pinshadowpath',
+    'osm_right_link',
+    'osm_left_link',
+    'osm_mapquestapi',
+  );
+  foreach ($text_fields as $field)
+  {
+    check_input_parameter($field, $_POST, false, '/^[^\x00-\x1F\x7F]*$/D');
+  }
 
-  check_input_parameter($_POST['osm_right_linkcss'], $_POST, false, '/^.{0,60}$/');
-  check_input_parameter($_POST['osm_right_linkcss'], $_POST, false, '/^.{0,60}$/');
-
-  check_input_parameter($_POST['osm_custombaselayer'], $_POST, false, '/^.{0,40}$/');
-  check_input_parameter($_POST['osm_custombaselayerurl'], $_POST, false, '/^.{0,40}$/');
-  check_input_parameter($_POST['osm_pinpath'], $_POST, false, '/^.{0,40}$/');
-  check_input_parameter($_POST['osm_pinshadowpath'], $_POST, false, '/^.{0,40}$/');
-
-  check_input_parameter($_POST['osm_right_link'], $_POST, false, '/^.{0,20}$/');
-  check_input_parameter($_POST['osm_left_link'], $_POST, false, '/^.{0,20}$/');
-
-  check_input_parameter($_POST['osm_pinsize'], $_POST, false, '/^.{0,6}$/');
-
-  check_input_parameter($_POST['osm_pinshadowsize'], $_POST, false, '/^.{0,4}$/');
-  check_input_parameter($_POST['osm_pinoffset'], $_POST, false, '/^.{0,4}$/');
-  check_input_parameter($_POST['osm_pinpopupoffset'], $_POST, false, '/^.{0,4}$/');
+  $pin_pairs = array('osm_pinsize', 'osm_pinshadowsize', 'osm_pinoffset', 'osm_pinpopupoffset');
+  foreach ($pin_pairs as $field)
+  {
+    check_input_parameter($field, $_POST, false, '/^(?: *(?:[+-]?(?:\d+(?:\.\d*)?|\.\d+)) *, *(?:[+-]?(?:\d+(?:\.\d*)?|\.\d+)) *)?$/D');
+  }
 
   //Booleans
   $boolean_fields = array(
@@ -240,8 +249,7 @@ if (isset($_POST['submit']) && !empty($_POST['osm_height']))
     'osm_left_popupinfo_img',
     'osm_left_popupinfo_link',
     'osm_left_popupinfo_comment',
-    'osm_left_popupinfo_author',
-    'mapquestapi'
+    'osm_left_popupinfo_author'
   );
 
   foreach ($boolean_fields as $boolean_field)
@@ -341,6 +349,7 @@ $template->assign(
         'AVAILABLE_GPX'        => $available_gpx,
         'NB_GEOTAGGED'         => $nb_geotagged,
         'OSM_PATH'             => OSM_PATH,
+        'PWG_TOKEN'            => get_pwg_token(),
         'GLOBAL_MODE'          => l10n('global mode'),
         'SINGLE_MODE'          => l10n('unit mode'),
     )
