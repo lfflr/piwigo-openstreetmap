@@ -52,6 +52,7 @@
 </div>
 
 <form method="post" action="" class="properties">
+  <input type="hidden" name="pwg_token" value="{$PWG_TOKEN}">
 <h3><i class="icon-picture"></i>{'Display map on picture page'|translate}</h3>
 	<fieldset>
 		<legend class="section-title" onclick="toggle_accordion(this)"><i class="icon-plus"></i>{'Configuration if the active theme has a right pannel'|translate}</legend>
