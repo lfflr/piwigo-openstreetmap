@@ -71,6 +71,7 @@ $("#searchInput").on("keydown", function(e) {
 {/footer_script}
 
 <form action="" method="post" id="update">
+  <input type="hidden" name="pwg_token" value="{$PWG_TOKEN}">
   {if isset($EDIT_PLACES_LIST)}
   <fieldset>
     <legend>{'EDIT_PLACES_LEGEND'|@translate}</legend>
@@ -83,7 +84,7 @@ $("#searchInput").on("keydown", function(e) {
       {foreach from=$places item=place}
       <tr>
         <td style="border-top: 1px dashed #005E89;">{$place.NAME}</td>
-        <td style="border-top: 1px dashed #005E89;"><input type="text" name="place_name-{$place.ID}" value="{$place.NAME}" size="50"></td>
+        <td style="border-top: 1px dashed #005E89;"><input type="text" name="place_name-{$place.ID}" value="{$place.NAME|escape:'html'}" size="50"></td>
       <tr>
       </tr>
         <td>{$place.LATITUDE}</td>
@@ -134,18 +135,17 @@ $("#searchInput").on("keydown", function(e) {
     {foreach from=$all_places item=place}
       <li>
         {capture name='showInfo'}{strip}
-          <b>{$place.name}</b><br>
+          <b>{$place.name|escape:'html'}</b><br>
         {/strip}{/capture}
         <a class="icon-info-circled-1 showInfo" title="{$smarty.capture.showInfo|@htmlspecialchars}"></a>
         <label>
-          <input type="checkbox" name="places[]" value="{$place.id}"> {$place.name}
+          <input type="checkbox" name="places[]" value="{$place.id}"> {$place.name|escape:'html'}
         </label>
       </li>
     {/foreach}
     </ul>
 
     <p>
-      <input type="hidden" name="pwg_token" value="{$PWG_TOKEN}">
       <input type="submit" name="edit" value="{'EDIT_PLACES'|@translate}">
       <input type="submit" name="delete" value="{'DELETE_PLACES'|@translate}" onclick="return confirm('{'Are you sure?'|@translate}');">
     </p>
