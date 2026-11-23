@@ -1,0 +1,25 @@
+name: PHP syntax
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: PHP syntax check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Check tracked PHP files
+        shell: bash
+        run: |
+          php --version
+          git ls-files -z -- '*.php' | xargs -0 -r -n 1 php -l
