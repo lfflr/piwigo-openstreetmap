@@ -355,7 +355,7 @@ L.Control.Search = L.Control.extend({
 
 	_filterRecords: function(text) {	//Filter this._recordsCache case insensitive and much more..
 	
-		var regFilter = new RegExp("^[.]$|[\[\]|()*]",'g'),	//remove . * | ( ) ] [
+		var regFilter = new RegExp("^[.]$|[\\[\\]|()*]",'g'),	//remove . * | ( ) ] [
 			I, regSearch,
 			frecords = {};
 
