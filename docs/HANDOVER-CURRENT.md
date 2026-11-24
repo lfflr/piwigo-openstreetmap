@@ -1,14 +1,14 @@
 # Aktuelle Übergabe – piwigo-openstreetmap (Neuentwicklung)
 
-**Stand:** 2026-11-24  
+**Stand:** 2026-11-24 (R0-Prüfung und Testergänzung)  
 **Entwicklungsrepository:** https://github.com/lfflr/piwigo-openstreetmap  
 **Ausgangsbranch:** `master`  
 **Aktiver Entwicklungsbranch:** `rewrite/next-generation`  
 **Entwicklungs-PR:** https://github.com/lfflr/piwigo-openstreetmap/pull/8 (Draft, offen; **nicht mergen**)  
 **Fork-Ursprung:** https://github.com/Piwigo/piwigo-openstreetmap (historische Referenz, kein Pflicht-Diff)  
-**Letzter bestätigter Commit auf dem Entwicklungsbranch bei Erstellung dieser Übergabe:** `637941e4ed5b729a67be5614688c7b7b40ffe65f` (vor dieser Dokumentation; aktuellen GitHub-HEAD stets neu prüfen).
+**Belegter Code-Commit dieser Arbeitsrunde:** `8fe73c88deea1513cc06a957f5e137727bf99206` (neuer erweiterter Geo-Test; aktueller Branch-HEAD ist nach Dokumentationsänderungen erneut zu prüfen).
 
-> **Status: frühe Neuentwicklung, nicht vollständig, nicht installierbar, keine produktionsreife Ersatzversion.** Legacy-Plugin wurde im Entwicklungsbranch nicht verändert. Es wurden bisher keine PHP-Lint-, Unit-, Integrations-, Browser- oder Live-Nominatim-Tests der neuen Module erfolgreich ausgeführt oder dokumentiert. Nicht als getestet darstellen.
+> **Status: frühe Neuentwicklung, nicht vollständig, nicht installierbar, keine produktionsreife Ersatzversion.** Legacy-Plugin wurde im Entwicklungsbranch nicht verändert. Am 2026-11-24 wurden die zwei neuen Geo-Klassen und `GeoSmokeTest.php` lokal unter PHP 8.4.24 syntaktisch geprüft; der Smoke-Test war erfolgreich. **Keine** Piwigo-Integrations-, Browser- oder Live-Nominatim-Tests ausgeführt. Der neu hinzugefügte Extended-Test ist noch nicht ausgeführt. Nicht als getestet darstellen.
 
 ## 1. Projektziel
 
@@ -24,7 +24,8 @@ Das veraltete Piwigo-OpenStreetMap-Plugin technisch modern und sicher neu aufbau
 - Vier Dateien **neu** auf dem Entwicklungsbranch erstellt:
   - `src/Geo/Coordinates.php` – isolierte Koordinatenvalidierung und Cache-Key-Berechnung.
   - `src/Geo/AddressParser.php` – isolierte Nominatim-JSON-Auswertung mit Fallback city/town/village/hamlet/municipality.
-  - `tests/GeoSmokeTest.php` – ausführbarer Testentwurf für Koordinaten und Parser.
+  - `tests/GeoSmokeTest.php` – ausführbarer Test für Koordinaten und Parser (2026-11-24 lokal bestanden).
+  - `tests/GeoExtendedTest.php` – ergänzte Grenzwert-/Fehlerfalltests (noch nicht ausgeführt).
   - `docs/REWRITE-PLAN.md` – Architektur, Migrationsprinzipien und Meilensteine.
 - Draft-PR #8 eröffnet. Neue Module sind **nicht** in `main.inc.php` eingebunden; es gibt daher noch keine durch sie bereitgestellte Plugin-Funktion.
 
@@ -38,7 +39,7 @@ Das veraltete Piwigo-OpenStreetMap-Plugin technisch modern und sicher neu aufbau
 | Release / Installations-ZIP der Neuentwicklung | **Nicht vorhanden** |
 | Migrationen für die Neuentwicklung | **Keine implementiert oder ausgeführt** |
 | Änderungen an produktiven Dateien | **Keine** |
-| Testausführung | **Keine belegten bestandenen Tests** |
+| Testausführung | PHP 8.4.24: 3× `php -l` erfolgreich; `php tests/GeoSmokeTest.php`: `OK: GeoSmokeTest`. Erweiterter Test ungetestet; keine Piwigo-Integration. |
 
 ## 4. Relevante bestätigte Code-Fundstellen
 
@@ -61,7 +62,7 @@ Siehe den fortlaufenden [REWRITE-PLAN.md](REWRITE-PLAN.md). Geplant:
 
 ## 6. Tests und Qualitätsnachweise
 
-**Geplante, noch nicht nachweislich ausgeführte Befehle:**
+**Am 2026-11-24 tatsächlich lokal ausgeführt:**
 
 ```bash
 php -l src/Geo/Coordinates.php
@@ -69,6 +70,8 @@ php -l src/Geo/AddressParser.php
 php -l tests/GeoSmokeTest.php
 php tests/GeoSmokeTest.php
 ```
+
+**Ergebnis:** Alle drei Lint-Aufrufe meldeten `No syntax errors detected`; der Smoke-Test meldete `OK: GeoSmokeTest`. Lokale Testkopie der von GitHub abgefragten Module, PHP CLI 8.4.24. Ausführung erfolgte ohne Piwigo und ohne Datenbank. **Noch offen:** `php -l tests/GeoExtendedTest.php` und `php tests/GeoExtendedTest.php` – Datei wurde in GitHub angelegt; Abruf in die lokale Laufzeitumgebung per `raw.githubusercontent.com` scheiterte an DNS (`Could not resolve host`). Weitere automatisierte und manuelle Tests stehen aus.
 
 Für jede weitere Phase tatsächlichen Testbefehl, Umgebung, Ergebnis, Datum, Commit und ggf. manuelle Abnahme notieren. Ohne Ausführung keinen „bestanden“-Status vergeben. GitHub Actions möglichst sparsam; lokale oder isolierte Dev-Instanz bevorzugt.
 
@@ -85,7 +88,7 @@ Für jede weitere Phase tatsächlichen Testbefehl, Umgebung, Ergebnis, Datum, Co
 ## 8. Nächster konkreter Entwicklungsauftrag
 
 1. Aktuellen Branch/PR/Commitstand frisch von GitHub lesen.
-2. Standalone-Geo-Module lokal mit PHP linten und testen; dokumentierte Testprobleme korrigieren.
+2. Neu ergänzten `GeoExtendedTest.php` lokal linten und ausführen; eventuell gefundene Probleme korrigieren. Bestehender `GeoSmokeTest.php` wurde am 2026-11-24 bestanden.
 3. Danach R1 umsetzen: sichere Piwigo-Web-API-Verträge und Persistenz-/Migrationskonzept inklusive negativer Tests.
 4. PR #8 bis zur vollständigen Integrationsabnahme als **Draft** belassen. Nicht auf `master` mergen und kein Release erstellen.
 
