@@ -1,6 +1,6 @@
 # Startpunkt für einen neuen Entwicklungs-Chat
 
-**Bitte zuerst lesen:** [HANDOVER-CURRENT.md](HANDOVER-CURRENT.md) , [REWRITE-PLAN.md](REWRITE-PLAN.md) und [PIWIGO-PLUGIN-STANDARDS.md](PIWIGO-PLUGIN-STANDARDS.md) im Branch `rewrite/next-generation` des Repositories https://github.com/lfflr/piwigo-openstreetmap. Die ältere [DEVELOPMENT-HANDOVER.md](DEVELOPMENT-HANDOVER.md) dokumentiert vor allem die statische Analyse des Legacy-Plugins.
+**Bitte zuerst lesen:** [HANDOVER-CURRENT.md](HANDOVER-CURRENT.md) , [REWRITE-PLAN.md](REWRITE-PLAN.md) und [PIWIGO-PLUGIN-STANDARDS.md](PIWIGO-PLUGIN-STANDARDS.md) sowie [R1-SECURITY-CONTRACT.md](R1-SECURITY-CONTRACT.md) im Branch `rewrite/next-generation` des Repositories https://github.com/lfflr/piwigo-openstreetmap. Die ältere [DEVELOPMENT-HANDOVER.md](DEVELOPMENT-HANDOVER.md) dokumentiert vor allem die statische Analyse des Legacy-Plugins.
 
 ## Kopierbare Aufgabenstellung
 
