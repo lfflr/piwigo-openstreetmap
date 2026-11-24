@@ -11,3 +11,5 @@ Dieses Verzeichnis ist die **maßgebliche Dokumentationsstelle** für neue Chats
 **Pflegepflicht:** Nach jeder Entwicklungsphase die aktuelle Übergabe sowie den Status im Entwicklungsplan aktualisieren. Nur tatsächlich ausgeführte Tests als bestanden dokumentieren.
 
 **GitHub:** https://github.com/lfflr/piwigo-openstreetmap – Entwicklungs-PR https://github.com/lfflr/piwigo-openstreetmap/pull/8.
+
+6. **[R1-Sicherheitsvertrag](R1-SECURITY-CONTRACT.md)** – Schreib-API, Eingabevalidierung, Rechte/CSRF und verpflichtende Negativtests.
