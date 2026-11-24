@@ -30,7 +30,7 @@ The checked `master` files (before this branch) include `main.inc.php`, `maintai
 
 ## Delivery checkpoints
 
-- R0 (started): typed coordinate and response parsing modules with executable standalone smoke test.
+- R0 (in progress): typed coordinate and response parsing modules; GeoSmokeTest passed locally on PHP 8.4.24 (2026-11-24), new GeoExtendedTest exists but is not yet executed.
 - R1: safe persistence and update strategy, security contracts and negative tests.
 - R2: photo/album/world map parity, Leaflet refresh and frontend browser tests.
 - R3: GPX, saved places, secure batch GPS changes.
@@ -46,7 +46,7 @@ php -l tests/GeoSmokeTest.php
 php tests/GeoSmokeTest.php
 ```
 
-**Not yet tested:** Piwigo integration, database migrations, browsers, real Nominatim, GPX, photo/album/world maps, cross-version compatibility. No production deployment is authorized.
+**Executed 2026-11-24:** PHP CLI 8.4.24, `php -l` on `src/Geo/Coordinates.php`, `src/Geo/AddressParser.php`, `tests/GeoSmokeTest.php` (all passed) and `php tests/GeoSmokeTest.php` (`OK: GeoSmokeTest`). **Not yet tested:** `GeoExtendedTest.php`, Piwigo integration, database migrations, browsers, real Nominatim, GPX, photo/album/world maps, cross-version compatibility. No production deployment is authorized.
 
 ## Old-code compatibility
 
@@ -64,7 +64,7 @@ The existing entrypoint remains unchanged on this branch while standalone domain
 
 | Phase | State | Evidence |
 | --- | --- | --- |
-| R0 | Started, not validated | `src/Geo/Coordinates.php`, `src/Geo/AddressParser.php`, `tests/GeoSmokeTest.php`; no recorded PHP test run |
+| R0 | Started; smoke-tested, not integrated | 2026-11-24 PHP 8.4.24: 3 lint passes + `GeoSmokeTest` OK; `tests/GeoExtendedTest.php` committed but untested |
 | R1 | Not started | No safe persistence or authenticated replacement API implemented |
 | R2 | Not started | No new Leaflet/photo/album/world UI |
 | R3 | Not started | No GPX/place/batch rewrite |
