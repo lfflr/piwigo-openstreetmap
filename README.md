@@ -1,58 +1,41 @@
-piwigo-openstreetmap
-==============
+# piwigo-openstreetmap
 
-[OpenStreetMap](http://OpenStreetMap.org/) port for piwigo. Add a OpenSource Map on your web gallery!
+OpenStreetMap integration for the [Piwigo](https://piwigo.org/) photo gallery. Displays geotagged photos on maps.
 
-Piwigo-openstreetmap is a [plugin](http://piwigo.org/ext/extension_view.php?eid=701) for the [Piwigo](http://piwigo.org/) web gallery that allows you to render the geotag within your piwigo install.
+**Development repository:** [lfflr/piwigo-openstreetmap](https://github.com/lfflr/piwigo-openstreetmap)  
+**Original upstream:** [xbgmsharp/piwigo-openstreetmap](https://github.com/xbgmsharp/piwigo-openstreetmap)
 
-Installation
-------------
+This repository is used for further development. The upstream project remains the reference for comparing changes and tracking fixes. No compatibility or security fixes should be assumed completed solely because this repository exists.
 
-Upload this in ``your-gallery/plugins/`` dir.
+## Installation
 
-* download the archive from github
+Place the plugin in `<piwigo-root>/plugins/piwigo-openstreetmap/`. The folder name must be exactly `piwigo-openstreetmap`.
 
-        wget -O piwigo-openstreetmap.zip https://github.com/xbgmsharp/piwigo-openstreetmap/archive/master.zip
+To clone this development repository:
 
-        unzip piwigo-openstreetmap.zip
+```bash
+cd <piwigo-root>/plugins
+git clone https://github.com/lfflr/piwigo-openstreetmap.git
+```
 
-        mv piwigo-openstreetmap-master piwigo-openstreetmap
+Or obtain a ZIP of a verified release from this repository and ensure the extracted top-level folder is named `piwigo-openstreetmap`. Activate the plugin in Piwigo's administration panel. **Do not install untested development branches into production.**
 
-* or clone the project 
+## Usage
 
-        git clone git://github.com/xbgmsharp/piwigo-openstreetmap.git
+Geotagged photos can be displayed on photo maps. The plugin also includes album/world maps, GPX functionality, place presets, batch geotagging and reverse-geocoding-based tags (dependent on the Piwigo `tag_groups` plugin).
 
-Then, go to the admin site, in the plugin section and activate it.
+## Development and documentation
 
-Usage
------
+See [Development handover](docs/DEVELOPMENT-HANDOVER.md) for the existing static-code-analysis findings, outstanding security and functional issues, test plan, and proposed development stages.
 
-Go to a photo with Geo tag sync and see a map appear on the photo page.
+Development branches and pull requests should target this repository's `master` branch. Compare with [upstream](https://github.com/xbgmsharp/piwigo-openstreetmap) before adopting any changes. The handover is an assessment, **not** evidence of executed tests or corrected vulnerabilities.
 
-Please refer to the [wiki](https://github.com/xbgmsharp/piwigo-openstreetmap/wiki) for additional information.
+Project issues: [lfflr/piwigo-openstreetmap/issues](https://github.com/lfflr/piwigo-openstreetmap/issues).  
+Original documentation: [upstream wiki](https://github.com/xbgmsharp/piwigo-openstreetmap/wiki).  
+Original Piwigo extension page: [extension 701](https://piwigo.org/ext/extension_view.php?eid=701).
 
-Support
------
+## Credits and license
 
-To get support, please create new [issue](https://github.com/xbgmsharp/piwigo-openstreetmap/issues)
+Originally developed in [xbgmsharp/piwigo-openstreetmap](https://github.com/xbgmsharp/piwigo-openstreetmap). Uses [OpenStreetMap](https://www.openstreetmap.org/), [Leaflet](https://leafletjs.com/) and [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster).
 
-Help me improve the plugin, rate my [plugin](http://piwigo.org/ext/extension_view.php?eid=701), and if possible please send a greeting message to me ;)
-
-Credit
-------
-
-* [OpenStreetMap](http://www.openstreetmap.org/)
-* [leafletjs](http://leafletjs.com)
-* [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster)
-
-Licence
--------
-The piwigo-openstreetmap plugin for Piwigo is free software:  you can redistribute it
-and/or  modify  it under  the  terms  of the  GNU  General  Public License  as
-published by the Free Software Foundation.
-
-This program  is distributed in the hope  that it will be  useful, but WITHOUT
-ANY WARRANTY; without even the  implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-See <http://www.gnu.org/licenses/gpl.html>.
+The Piwigo OpenStreetMap plugin is free software under the GNU General Public License. See the repository's licensing files and original notices for applicable terms; no change to the project's license is intended by this documentation update.
