@@ -10,7 +10,6 @@ require_once dirname(__DIR__) . '/src/Geo/Coordinates.php';
 require_once dirname(__DIR__) . '/src/Geo/GeoWriteInput.php';
 
 use Lfflr\PiwigoOpenStreetMap\Geo\GeoWriteInput;
-use InvalidArgumentException;
 
 /**
  * Register only after browser-session authentication/CSRF tests on Piwigo 16/17.
