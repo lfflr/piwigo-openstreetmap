@@ -13,3 +13,5 @@ Dieses Verzeichnis ist die **maßgebliche Dokumentationsstelle** für neue Chats
 **GitHub:** https://github.com/lfflr/piwigo-openstreetmap – Entwicklungs-PR https://github.com/lfflr/piwigo-openstreetmap/pull/8.
 
 6. **[R1-Sicherheitsvertrag](R1-SECURITY-CONTRACT.md)** – Schreib-API, Eingabevalidierung, Rechte/CSRF und verpflichtende Negativtests.
+
+7. **[R1-API-Adapter](R1-API-ADAPTER.md)** – inaktiver, isoliert getesteter Piwigo-GPS-Schreibadapter, belegte Tests und offene Integrationsrisiken.
