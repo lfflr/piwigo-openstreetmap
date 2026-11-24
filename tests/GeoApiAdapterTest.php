@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 define('PHPWG_ROOT_PATH', __DIR__ . '/../');
 define('IMAGES_TABLE', 'pwg_images');
+define('WS_TYPE_ID', 50); // Core constant stub for isolated registration test.
 
 class PwgError
 {
@@ -58,6 +59,11 @@ checkStatus(osm_ws_geo_write($params, $server), 403, 'Guest must be forbidden');
 if ($GLOBALS['queries'] !== []) { throw new RuntimeException('Guest reached database'); }
 
 $GLOBALS['is_admin'] = true;
+$_SESSION['connected_with'] = 'ws_session_login_api_key';
+resetRequests();
+checkStatus(osm_ws_geo_write($params, $server), 403, 'API-key session rejected');
+if ($GLOBALS['queries'] !== []) { throw new RuntimeException('API-key session reached database'); }
+unset($_SESSION['connected_with']);
 resetRequests();
 checkStatus(osm_ws_geo_write(array_merge($params, ['pwg_token' => 'bad']), $server), 403, 'Invalid CSRF');
 checkStatus(osm_ws_geo_write(array_merge($params, ['pwg_token' => null]), $server), 403, 'Missing CSRF');
