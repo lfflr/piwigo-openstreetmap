@@ -1,6 +1,6 @@
 # Aktuelle Übergabe – piwigo-openstreetmap (Neuentwicklung)
 
-**Stand:** 2026-11-24 (R0-Prüfung und R1-Validierung)  
+**Stand:** 2026-11-24 (R1 API-Adapter – noch nicht aktiviert)  
 **Entwicklungsrepository:** https://github.com/lfflr/piwigo-openstreetmap  
 **Ausgangsbranch:** `master`  
 **Aktiver Entwicklungsbranch:** `rewrite/next-generation`  
@@ -111,3 +111,11 @@ Zum Ende **jeder** Entwicklungsphase diese Datei aktualisieren mit: stabile Vers
 **Migrationen:** Keine. **Aktuelle Release-/Entwicklungsversion:** keine neue Versionsnummer; `main.inc.php` bleibt Legacy `Version: auto`. **ZIP:** kein installierbarer Neubau. **Produktions-/Master-Änderungen:** keine. **Tests offen:** Piwigo-API, Admin-Authentifizierung/CSRF, Datenbank, Browser, Piwigo 16/17, Nominatim.
 
 **Nächster Schritt:** R1 API-Signatur mit tatsächlich installiertem Piwigo-Core prüfen, Autorisierung und sichere Persistenz implementieren, negative Integrationsprüfungen durchführen; PR #8 bleibt Draft. Aktuellen Branch-HEAD beim Start eines neuen Chats erneut über GitHub ermitteln, nicht aus einem früheren SHA ableiten.
+
+## 11. Fortsetzung 2026-11-24 – nicht aktivierter R1-API-Adapter
+
+**Code:** `include/ws_geo_write.inc.php` und `tests/GeoApiAdapterTest.php` neu, danach korrigiert (API-Key-Sitzungs-Negativtest, Test-Konstante `WS_TYPE_ID`, Warnung entfernt). `main.inc.php` wurde **nicht** verändert: die neue API ist nicht aktiv, Legacy-Schreib-Hook bleibt aktiv. Referenz: [R1-API-ADAPTER.md](R1-API-ADAPTER.md).
+
+**Testnachweise:** PHP CLI 8.4.24, 2026-11-24, manuell kopierte Dateien im lokalen `/mnt/data/piwigo-r1`: PHP-Lint auf 7 Dateien ohne Fehler; `GeoApiAdapterTest.php` OK (Mock-Core/Mock-DB), `GeoExtendedTest.php` 35 Assertions OK, `GeoWriteInputTest.php` 19 Assertions OK. Git-Checkout-Identität nicht verifiziert, da GitHub-RAW-DNS fehlgeschlagen; keine echte Piwigo-/DB-/Browserabnahme.
+
+**Versionen, Migrationen, ZIPs:** keine neue Entwicklungsversion; keine Migration; kein Installations-ZIP; keine Änderungen an `master`. Draft-PR [#8](https://github.com/lfflr/piwigo-openstreetmap/pull/8) bleibt offen. **Nächster Schritt:** realen Piwigo-Core 16/17 und DB-Adapter prüfen, Auth-/CSRF-/SQL-Integrationstests mit isolierter Instanz; erst danach den Legacy-Hook ersetzen. Aktuellen Branch-HEAD vor Fortsetzung über GitHub lesen.
