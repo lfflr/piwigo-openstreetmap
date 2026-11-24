@@ -20,3 +20,5 @@
 - Altcode und Daten unangetastet lassen, bis Migration und Rückweg getestet sind.
 - Nur funktions- und sicherheitsgeprüfte ZIPs als Installationspakete anbieten; oberster ZIP-Ordner `piwigo-openstreetmap/`.
 - Offene Fragen ausdrücklich dokumentieren, nicht durch Vermutungen als erledigt markieren.
+
+**R1-Fortsetzung:** Vor dem Aktivieren der neuen API unbedingt [R1-API-ADAPTER.md](R1-API-ADAPTER.md) und den dortigen Test-/Kompatibilitätsstatus prüfen. Der neue Handler ist absichtlich noch nicht in `main.inc.php` registriert; der Legacy-Hook darf nur kontrolliert nach Integrationstests ersetzt werden.
