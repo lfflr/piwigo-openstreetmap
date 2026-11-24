@@ -70,3 +70,9 @@ The existing entrypoint remains unchanged on this branch while standalone domain
 | R3 | Not started | No GPX/place/batch rewrite |
 | R4 | Not started | No cache, Nominatim job service, resumable sync |
 | R5 | Not started | No Piwigo 16/17 integration acceptance, ZIP or release |
+
+### R0/R1 update – 2026-11-24
+
+- **R0:** `GeoExtendedTest.php` lokal mit 35 erfolgreichen Assertions ausgeführt, dennoch vollständige Git-Checkout-Verifikation offen.
+- **R1 begonnen:** `GeoWriteInput.php` und `GeoWriteInputTest.php` mit 19 erfolgreichen Assertions lokal geprüft. Nur Eingabevalidierung; noch **keine** Autorisierung, CSRF-Prüfung, Piwigo-API, Datenhaltung oder Migration implementiert. [Sicherheitsvertrag](R1-SECURITY-CONTRACT.md).
+- Kein funktionaler Ersatz für die bestehende Plugin-Version. PR #8 bleibt Draft, kein Merge und kein Release.
