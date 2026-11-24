@@ -1,6 +1,6 @@
 # Aktuelle Übergabe – piwigo-openstreetmap (Neuentwicklung)
 
-**Stand:** 2026-11-24 (R0-Prüfung und Testergänzung)  
+**Stand:** 2026-11-24 (R0-Prüfung und R1-Validierung)  
 **Entwicklungsrepository:** https://github.com/lfflr/piwigo-openstreetmap  
 **Ausgangsbranch:** `master`  
 **Aktiver Entwicklungsbranch:** `rewrite/next-generation`  
@@ -95,3 +95,19 @@ Für jede weitere Phase tatsächlichen Testbefehl, Umgebung, Ergebnis, Datum, Co
 ## 9. Verbindliche Übergabekonvention für jede Phase
 
 Zum Ende **jeder** Entwicklungsphase diese Datei aktualisieren mit: stabile Version, Entwicklungsversion, Repository/Branch/Commit-SHA, geänderten Funktionen/Dateien, Migrationen, **wirklich ausgeführten** Tests und Ergebnissen, bekannten Fehlern/offenen Fragen, PR-/Release-Links, vorhandenen Installations-ZIPs und nächster Phase. Alte Befunde dürfen nicht ungeprüft als aktuell ausgegeben werden. Zusätzlich [CHAT-START.md](CHAT-START.md) für den nächsten Chat aktuell halten.
+
+## 10. Fortsetzung vom 2026-11-24 – R0 Tests und R1-Eingabevalidierung
+
+**Branch:** `rewrite/next-generation`; **Draft-PR:** [#8](https://github.com/lfflr/piwigo-openstreetmap/pull/8). Frühere Statusangaben zu Testausführung in diesem Dokument sind historisch; für die aktuellste Prüfungsübersicht gilt dieser Abschnitt.
+
+**Neu in GitHub:**
+- `tests/GeoExtendedTest.php` (bereits vorher angelegt, jetzt isoliert ausgeführt).
+- `src/Geo/GeoWriteInput.php`: streng validierter Befehl für Bildkoordinaten, `set`/ `delete` ohne Datenbankzugriff.
+- `tests/GeoWriteInputTest.php`: 19 positive/negative Assertions.
+- `docs/R1-SECURITY-CONTRACT.md`: notwendige Auth-/CSRF-/Persistenz-/Testbedingungen.
+
+**Ausgeführte Tests:** Lokale PHP-8.4.24-CLI, nachgebildete Quelltexte aus den GitHub-Dateien: `php -l` für `Coordinates.php`, `AddressParser.php`, `GeoExtendedTest.php`, `GeoWriteInput.php`, `GeoWriteInputTest.php` erfolgreich; `php tests/GeoExtendedTest.php` = `OK: GeoExtendedTest (35 assertions)`, `php tests/GeoWriteInputTest.php` = `OK: GeoWriteInputTest (19 assertions)`. **Grenze:** Direktes Klonen des GitHub-Branches war wegen DNS nicht möglich; vollständige Gleichheit von Testkopie und GitHub-Dateien nicht automatisiert verifiziert. Deshalb erneut auf einem echten Git-Checkout testen.
+
+**Migrationen:** Keine. **Aktuelle Release-/Entwicklungsversion:** keine neue Versionsnummer; `main.inc.php` bleibt Legacy `Version: auto`. **ZIP:** kein installierbarer Neubau. **Produktions-/Master-Änderungen:** keine. **Tests offen:** Piwigo-API, Admin-Authentifizierung/CSRF, Datenbank, Browser, Piwigo 16/17, Nominatim.
+
+**Nächster Schritt:** R1 API-Signatur mit tatsächlich installiertem Piwigo-Core prüfen, Autorisierung und sichere Persistenz implementieren, negative Integrationsprüfungen durchführen; PR #8 bleibt Draft. Aktuellen Branch-HEAD beim Start eines neuen Chats erneut über GitHub ermitteln, nicht aus einem früheren SHA ableiten.
