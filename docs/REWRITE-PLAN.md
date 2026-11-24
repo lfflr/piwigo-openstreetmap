@@ -76,3 +76,8 @@ The existing entrypoint remains unchanged on this branch while standalone domain
 - **R0:** `GeoExtendedTest.php` lokal mit 35 erfolgreichen Assertions ausgeführt, dennoch vollständige Git-Checkout-Verifikation offen.
 - **R1 begonnen:** `GeoWriteInput.php` und `GeoWriteInputTest.php` mit 19 erfolgreichen Assertions lokal geprüft. Nur Eingabevalidierung; noch **keine** Autorisierung, CSRF-Prüfung, Piwigo-API, Datenhaltung oder Migration implementiert. [Sicherheitsvertrag](R1-SECURITY-CONTRACT.md).
 - Kein funktionaler Ersatz für die bestehende Plugin-Version. PR #8 bleibt Draft, kein Merge und kein Release.
+
+### R1 adapter update – 2026-11-24
+
+- `include/ws_geo_write.inc.php` implements a **dormant** registered-method design for `osm.geo.setCoordinates`, browser session + CSRF, admin permissions, explicit set/delete, and validated numeric SQL writes. `main.inc.php` is unchanged; legacy write hook still operates. See [R1-API-ADAPTER.md](R1-API-ADAPTER.md).
+- Local PHP 8.4.24 lint: 7 files successful; `GeoApiAdapterTest` mock tests OK, `GeoExtendedTest` 35 assertions, `GeoWriteInputTest` 19 assertions. A complete Git checkout and actual Piwigo/database tests remain necessary. **R1 not complete.**
