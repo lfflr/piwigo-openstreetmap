@@ -3,10 +3,10 @@
 **Dokumentationsstand:** 2026-11-24  
 **Entwicklungsrepository:** https://github.com/lfflr/piwigo-openstreetmap  
 **Standardbranch laut GitHub-Abfrage:** `master`  
-**Upstream (nur Referenz):** https://github.com/xbgmsharp/piwigo-openstreetmap  
+**Fork-Ursprung / Upstream (Referenz):** https://github.com/Piwigo/piwigo-openstreetmap  
 **Quellgrundlage:** vom Nutzer bereitgestellte „Piwigo HANDOVER.md“, Analyse vom 2026-11-22 des Archivs `piwigo-osmtags-master.zip`. 
 
-> Die folgenden Codebefunde stammen aus einer statischen Analyse des **Archivs**, nicht aus einer erneut durchgeführten vollständigen Prüfung des GitHub-Repositories. Es wurden dabei weder PHP-Lint noch Laufzeit-, Integrations- oder Nominatim-Tests ausgeführt. **Der konkrete Diff zwischen Archiv, Entwicklungsrepository und Upstream ist weiterhin offen.** Keine der beschriebenen Fehlerbehebungen gilt durch diese Dokumentation als implementiert.
+> Die folgenden Codebefunde stammen aus einer statischen Analyse des **Archivs**, nicht aus einer erneut durchgeführten vollständigen Prüfung des GitHub-Repositories. Es wurden dabei weder PHP-Lint noch Laufzeit-, Integrations- oder Nominatim-Tests ausgeführt. **Ob alle Befunde auch im aktuellen `master` bestehen, ist noch anhand des dortigen Codes zu prüfen.** Ein Upstream-Diff ist für den Sicherheitsblock nicht erforderlich. Keine der beschriebenen Fehlerbehebungen gilt durch diese Dokumentation als implementiert.
 
 ## 1. Ausgangslage
 
@@ -14,7 +14,7 @@
 - Im untersuchten Archiv: Changelog bis `15.a`, `Version: auto` in `main.inc.php`, Leaflet 0.7.7, Markercluster, Elevation 0.0.2, Search, Fontello, Übersetzungen.
 - Der Archiv-Ordner `piwigo-osmtags-master` muss bei Installation `piwigo-openstreetmap` heißen.
 - Angestrebte Umgebung Piwigo 16/17 und PHP 8; **konkrete Mindestversion und Kompatibilität noch nicht verifiziert**.
-- GitHub-Änderungen, Branches, PRs und Releases gehören nach `lfflr/piwigo-openstreetmap`; Upstream wird nur verglichen.
+- GitHub-Änderungen, Branches, PRs und Releases gehören nach `lfflr/piwigo-openstreetmap`. Das Repository `Piwigo/piwigo-openstreetmap` ist der Fork-Ursprung; ein Vergleich ist optional.
 
 ## 2. Architektur im untersuchten Archiv
 
@@ -112,7 +112,7 @@ find . -name '*.php' -not -path './language/*' -print0 | xargs -0 -n1 php -l
 
 ## 9. Offene Entscheidungen und Nachweise
 
-- **O1:** Diff des untersuchten Archivs gegen `lfflr/piwigo-openstreetmap` und Upstream mit konkreten Commits erstellen. Noch keine geprüfte Fork-Differenz.
+- **O1:** Die archivbasierten Befunde zunächst direkt im aktuellen `master` von `lfflr/piwigo-openstreetmap` nachprüfen. Ein historischer Diff mit dem Fork-Ursprung ist optional und kein Blocker.
 - **O2:** Unterstützte Piwigo-/PHP-Mindestversion festlegen; Smarty 5 vollständig prüfen.
 - **O3:** Öffentliche virtuelle Album-Erzeugung entfernen oder ausschließlich für authentifizierte Admins implementieren.
 - **O4:** Privat entwickeln oder zusätzlich auf piwigo.org veröffentlichen?
@@ -127,10 +127,10 @@ find . -name '*.php' -not -path './language/*' -print0 | xargs -0 -n1 php -l
 - [Piwigo Web API](https://github.com/Piwigo/Piwigo/wiki/Piwigo-Web-API)
 - [Piwigo 16 – technische Änderungen](https://github.com/Piwigo/Piwigo/wiki/Technical-changes-in-Piwigo-16)
 - [Piwigo 17 – technische Änderungen](https://github.com/Piwigo/Piwigo/wiki/Technical-changes-in-Piwigo-17)
-- [Originalprojekt](https://github.com/xbgmsharp/piwigo-openstreetmap)
+- [Fork-Ursprung (Piwigo)](https://github.com/Piwigo/piwigo-openstreetmap)
 
 ## 11. Nächster Schritt
 
-1. Quellvergleich (Archiv / eigener `master` / Upstream), vorhandene Änderungen dokumentieren.
+1. Aktuellen `master` des eigenen Repositories prüfen und Befunde aus der Archiv-Analyse bestätigen oder berichtigen (kein verpflichtender Upstream-Vergleich).
 2. Sicherheit und Entscheidung O3 priorisieren.
 3. Entwicklungsblock A als eigenen PR implementieren, Tests protokollieren, erst danach B/C/D.
