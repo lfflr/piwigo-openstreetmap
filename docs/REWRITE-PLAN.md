@@ -51,3 +51,22 @@ php tests/GeoSmokeTest.php
 ## Old-code compatibility
 
 The existing entrypoint remains unchanged on this branch while standalone domain modules are introduced. No new module is wired into Piwigo, so this branch is not deployable as a replacement. Do not merge until at least the functional and security parity tests pass.
+
+## Documentation and handover workflow (mandatory)
+
+- **Current state:** [HANDOVER-CURRENT.md](HANDOVER-CURRENT.md) – must include stable/development versions, branch and SHA, changed files, database migrations, executed test results with evidence, open defects, PR/release links, installable ZIPs, and exact next step.
+- **Next-chat instructions:** [CHAT-START.md](CHAT-START.md) – update when the phase/working branch changes.
+- **Documentation index:** [README.md](README.md) in this directory.
+- **Legacy findings:** [DEVELOPMENT-HANDOVER.md](DEVELOPMENT-HANDOVER.md) – reference only; validate against current source before treating a finding as open or fixed.
+- At the end of each phase, update the handover and phase statuses **in GitHub on the active development branch**, link actual test logs/commits, and identify the next phase. Never assert that tests passed without execution.
+
+### Current milestone status (2026-11-24)
+
+| Phase | State | Evidence |
+| --- | --- | --- |
+| R0 | Started, not validated | `src/Geo/Coordinates.php`, `src/Geo/AddressParser.php`, `tests/GeoSmokeTest.php`; no recorded PHP test run |
+| R1 | Not started | No safe persistence or authenticated replacement API implemented |
+| R2 | Not started | No new Leaflet/photo/album/world UI |
+| R3 | Not started | No GPX/place/batch rewrite |
+| R4 | Not started | No cache, Nominatim job service, resumable sync |
+| R5 | Not started | No Piwigo 16/17 integration acceptance, ZIP or release |
