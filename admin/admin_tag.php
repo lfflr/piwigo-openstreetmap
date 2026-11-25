@@ -158,12 +158,13 @@ if ( $tag_groups == 1 and isset($_POST['osm_tag_submit']) )
 			}
 		}
 
-		if (!isset($json) or empty($json))
+		if (empty($json))
+		{
 			$errors[] = "Error fetching geo reverse address data for ". $image['id'];
-		else
-			//var_dump(json_decode($json, true));
-			$response = json_decode($json, true);
-			//print_r($response);
+			continue;
+		}
+
+		$response = json_decode($json, true);
 
 		// If reponse include [address]
 		if (isset($response) and isset($response['address']) and is_array($response['address']))
@@ -218,7 +219,7 @@ if ( $tag_groups == 1 and isset($_POST['osm_tag_submit']) )
 			}
 			else
 			{
-				$warnings = "No valid tags for ". $image['name'] . " available tag: ". osm_pprint_r(array_keys($response['address']));
+				$warnings[] = "No valid tags for ". $image['name'] . " available tag: ". osm_pprint_r(array_keys($response['address']));
 			}
 		}
 		//die("Done one image");
