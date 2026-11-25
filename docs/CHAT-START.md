@@ -1,24 +1,7 @@
-# Startpunkt für einen neuen Entwicklungs-Chat
+# Startnachricht für den gemeinsamen Entwicklungschat
 
-**Bitte zuerst lesen:** [HANDOVER-CURRENT.md](HANDOVER-CURRENT.md) , [REWRITE-PLAN.md](REWRITE-PLAN.md) und [PIWIGO-PLUGIN-STANDARDS.md](PIWIGO-PLUGIN-STANDARDS.md) sowie [R1-SECURITY-CONTRACT.md](R1-SECURITY-CONTRACT.md) im Branch `rewrite/next-generation` des Repositories https://github.com/lfflr/piwigo-openstreetmap. Die ältere [DEVELOPMENT-HANDOVER.md](DEVELOPMENT-HANDOVER.md) dokumentiert vor allem die statische Analyse des Legacy-Plugins.
-
-## Kopierbare Aufgabenstellung
-
-> Setze die Neuentwicklung von `lfflr/piwigo-openstreetmap` anhand der aktuellen GitHub-Dokumentation fort. Prüfe zuerst `docs/HANDOVER-CURRENT.md`, `docs/REWRITE-PLAN.md`, den aktuellen Entwicklungsbranch und Draft-PR #8. Arbeite nur in Entwicklungsbranches, sichere Bestandsdaten und erhalte die Plugin-ID `piwigo-openstreetmap`. Schreibe keine ungetesteten Funktionen als fertig, dokumentiere tatsächlich ausgeführte Tests mit Commit und Ergebnis. Nutze GitHub Actions sparsam; bevorzugt isolierte Testumgebung. Kein Merge auf `master`, keine Release-Veröffentlichung und keine Produktionsänderungen ohne dokumentierte Abnahme. Aktualisiere am Ende dieses Arbeitsschritts die beiden Übergabedokumente und gib Branch, SHA, PR-Link, Änderungen, Migrationen, Tests, offene Punkte, ZIPs und nächste Phase an.
-
-## Was als gesichert gilt
-
-- Entwicklungsrepository: `lfflr/piwigo-openstreetmap`; Fork-Ursprung `Piwigo/piwigo-openstreetmap`.
-- Die Neuentwicklung wurde auf `rewrite/next-generation` begonnen, aber ist derzeit **nicht installierbar oder integriert**.
-- Draft-PR: https://github.com/lfflr/piwigo-openstreetmap/pull/8
-- Keine belegten erfolgreichen PHP- oder Browser-Tests des Neubaus; keine neuen Releases.
-- Aktuellen Stand nicht aus dem Chat erraten: vor der Arbeit GitHub und Dokumentation lesen.
-
-## Projektregeln
-
-- Ein Phase/Arbeitspaket nach dem anderen; PR-Status, Commit-SHAs und Doku synchron halten.
-- Altcode und Daten unangetastet lassen, bis Migration und Rückweg getestet sind.
-- Nur funktions- und sicherheitsgeprüfte ZIPs als Installationspakete anbieten; oberster ZIP-Ordner `piwigo-openstreetmap/`.
-- Offene Fragen ausdrücklich dokumentieren, nicht durch Vermutungen als erledigt markieren.
-
-**R1-Fortsetzung:** Vor dem Aktivieren der neuen API unbedingt [R1-API-ADAPTER.md](R1-API-ADAPTER.md) und den dortigen Test-/Kompatibilitätsstatus prüfen. Der neue Handler ist absichtlich noch nicht in `main.inc.php` registriert; der Legacy-Hook darf nur kontrolliert nach Integrationstests ersetzt werden.
+> Wir entwickeln das Piwigo-Plugin im Repository [lfflr/piwigo-openstreetmap](https://github.com/lfflr/piwigo-openstreetmap) gemeinsam weiter. Lies zuerst die [aktuelle Übergabe](https://github.com/lfflr/piwigo-openstreetmap/blob/rewrite/next-generation/docs/HANDOVER-CURRENT.md) und den [Entwicklungsplan](https://github.com/lfflr/piwigo-openstreetmap/blob/rewrite/next-generation/docs/REWRITE-PLAN.md). Prüfe den aktuellen HEAD von `rewrite/next-generation` und [Draft-PR #8](https://github.com/lfflr/piwigo-openstreetmap/pull/8).
+>
+> Der nächste Arbeitsblock ist R1. Lies [R1-API-ADAPTER.md](https://github.com/lfflr/piwigo-openstreetmap/blob/rewrite/next-generation/docs/R1-API-ADAPTER.md), [R1-SECURITY-CONTRACT.md](https://github.com/lfflr/piwigo-openstreetmap/blob/rewrite/next-generation/docs/R1-SECURITY-CONTRACT.md) und [PIWIGO-PLUGIN-STANDARDS.md](https://github.com/lfflr/piwigo-openstreetmap/blob/rewrite/next-generation/docs/PIWIGO-PLUGIN-STANDARDS.md). Führe die vier vorhandenen PHP-Testskripte aus dem Checkout aus und prüfe den GPS-Schreibadapter mit dem tatsächlichen Piwigo-Core und MariaDB auf einer isolierten Testinstanz. PR #8 bleibt bis zur Abnahme ein Draft.
+>
+> Halte vor Beginn fest, wer welches Paket auf welchem Branch bearbeitet. Erhalte die Plugin-ID `piwigo-openstreetmap` und die Bestandsdaten. Aktualisiere am Ende `docs/HANDOVER-CURRENT.md` und `docs/REWRITE-PLAN.md` im Repository. Dokumentiere Ausgangs-/End-SHA, betroffene Dateien, Migrationen, tatsächlich ausgeführte Tests, offene Punkte und den nächsten Schritt.

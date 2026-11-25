@@ -2,7 +2,7 @@
 
 **Repository:** https://github.com/lfflr/piwigo-openstreetmap  
 **Branch:** `rewrite/next-generation`  
-**Status:** first isolated implementation only; **NOT an installable rewrite or release**.
+**Status (2026-11-25):** R0 foundation and dormant R1 adapter in [draft PR #8](https://github.com/lfflr/piwigo-openstreetmap/pull/8). Integration and release acceptance are pending.
 
 ## Scope and invariants
 
@@ -30,23 +30,30 @@ The checked `master` files (before this branch) include `main.inc.php`, `maintai
 
 ## Delivery checkpoints
 
-- R0 (in progress): typed coordinate and response parsing modules; GeoSmokeTest passed locally on PHP 8.4.24 (2026-11-24), new GeoExtendedTest exists but is not yet executed.
-- R1: safe persistence and update strategy, security contracts and negative tests.
-- R2: photo/album/world map parity, Leaflet refresh and frontend browser tests.
-- R3: GPX, saved places, secure batch GPS changes.
-- R4: API-based reverse-geocoding jobs, cache, progress, rate limiting, simulation and overwrite semantics.
-- R5: end-to-end Piwigo 16 and 17 acceptance, large-gallery performance tests, update/rollback tests, translation and ZIP packaging.
+| Phase | State | Next acceptance step |
+| --- | --- | --- |
+| R0 | Geo foundation implemented in isolation | Rerun the domain tests from a Git checkout. |
+| R1 | Input validation and dormant GPS-write adapter implemented | Verify against the selected Piwigo Core and MariaDB. Integrate the new write path and its callers after acceptance. |
+| R2 | Pending | Photo, album and world-map parity, Leaflet refresh and browser tests. |
+| R3 | Pending | GPX, saved places and secure batch GPS changes. |
+| R4 | Pending | Reverse-geocoding jobs, cache, progress, rate limiting, simulation and overwrite behavior. |
+| R5 | Pending | Piwigo 16 and 17 acceptance, large galleries, updates, rollback, translations and ZIP packaging. |
 
-## Tests
+## Test commands
+
+Run from the active development checkout and record the commit and PHP version.
 
 ```bash
-php -l src/Geo/Coordinates.php
-php -l src/Geo/AddressParser.php
-php -l tests/GeoSmokeTest.php
+git rev-parse HEAD
+php --version
+git ls-files -z -- '*.php' | xargs -0 -r -n 1 php -l
 php tests/GeoSmokeTest.php
+php tests/GeoExtendedTest.php
+php tests/GeoWriteInputTest.php
+php tests/GeoApiAdapterTest.php
 ```
 
-**Executed 2026-11-24:** PHP CLI 8.4.24, `php -l` on `src/Geo/Coordinates.php`, `src/Geo/AddressParser.php`, `tests/GeoSmokeTest.php` (all passed) and `php tests/GeoSmokeTest.php` (`OK: GeoSmokeTest`). **Not yet tested:** `GeoExtendedTest.php`, Piwigo integration, database migrations, browsers, real Nominatim, GPX, photo/album/world maps, cross-version compatibility. No production deployment is authorized.
+Current evidence and outstanding integration checks are recorded in [HANDOVER-CURRENT.md](HANDOVER-CURRENT.md). The R1 design and test boundaries are described in [R1-API-ADAPTER.md](R1-API-ADAPTER.md) and [R1-SECURITY-CONTRACT.md](R1-SECURITY-CONTRACT.md).
 
 ## Old-code compatibility
 
@@ -59,25 +66,3 @@ The existing entrypoint remains unchanged on this branch while standalone domain
 - **Documentation index:** [README.md](README.md) in this directory.
 - **Legacy findings:** [DEVELOPMENT-HANDOVER.md](DEVELOPMENT-HANDOVER.md) – reference only; validate against current source before treating a finding as open or fixed.
 - At the end of each phase, update the handover and phase statuses **in GitHub on the active development branch**, link actual test logs/commits, and identify the next phase. Never assert that tests passed without execution.
-
-### Current milestone status (2026-11-24)
-
-| Phase | State | Evidence |
-| --- | --- | --- |
-| R0 | Started; smoke-tested, not integrated | 2026-11-24 PHP 8.4.24: 3 lint passes + `GeoSmokeTest` OK; `tests/GeoExtendedTest.php` committed but untested |
-| R1 | Not started | No safe persistence or authenticated replacement API implemented |
-| R2 | Not started | No new Leaflet/photo/album/world UI |
-| R3 | Not started | No GPX/place/batch rewrite |
-| R4 | Not started | No cache, Nominatim job service, resumable sync |
-| R5 | Not started | No Piwigo 16/17 integration acceptance, ZIP or release |
-
-### R0/R1 update – 2026-11-24
-
-- **R0:** `GeoExtendedTest.php` lokal mit 35 erfolgreichen Assertions ausgeführt, dennoch vollständige Git-Checkout-Verifikation offen.
-- **R1 begonnen:** `GeoWriteInput.php` und `GeoWriteInputTest.php` mit 19 erfolgreichen Assertions lokal geprüft. Nur Eingabevalidierung; noch **keine** Autorisierung, CSRF-Prüfung, Piwigo-API, Datenhaltung oder Migration implementiert. [Sicherheitsvertrag](R1-SECURITY-CONTRACT.md).
-- Kein funktionaler Ersatz für die bestehende Plugin-Version. PR #8 bleibt Draft, kein Merge und kein Release.
-
-### R1 adapter update – 2026-11-24
-
-- `include/ws_geo_write.inc.php` implements a **dormant** registered-method design for `osm.geo.setCoordinates`, browser session + CSRF, admin permissions, explicit set/delete, and validated numeric SQL writes. `main.inc.php` is unchanged; legacy write hook still operates. See [R1-API-ADAPTER.md](R1-API-ADAPTER.md).
-- Local PHP 8.4.24 lint: 7 files successful; `GeoApiAdapterTest` mock tests OK, `GeoExtendedTest` 35 assertions, `GeoWriteInputTest` 19 assertions. A complete Git checkout and actual Piwigo/database tests remain necessary. **R1 not complete.**
