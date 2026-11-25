@@ -35,6 +35,50 @@ load_language('plugin.lang', OSM_PATH);
 // Fetch the template.
 global $template, $conf, $lang;
 
+if (isset($_POST['add']) or isset($_POST['edit_submit']) or isset($_POST['delete']))
+{
+  check_pwg_token();
+}
+
+$parse_place_ids = static function (array $values) {
+  $ids = array();
+  foreach ($values as $value)
+  {
+    $id = is_string($value)
+      ? filter_var($value, FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 16777215)))
+      : false;
+    if ($id === false)
+    {
+      return array();
+    }
+    $ids[$id] = $id;
+  }
+  return $ids;
+};
+
+$parse_place = static function ($name, $latitude, $longitude) {
+  if (!is_string($name) or trim($name) === '' or !is_string($latitude) or !is_string($longitude))
+  {
+    return null;
+  }
+
+  $latitude = filter_var($latitude, FILTER_VALIDATE_FLOAT);
+  $longitude = filter_var($longitude, FILTER_VALIDATE_FLOAT);
+  if ($latitude === false or abs($latitude) > 90 or $longitude === false or abs($longitude) > 180)
+  {
+    return null;
+  }
+
+  return array(
+    'name' => stripslashes($name),
+    'latitude' => $latitude,
+    'longitude' => $longitude,
+    );
+};
+
+$selected_ids = is_array($_POST['places'] ?? null) ? $parse_place_ids($_POST['places']) : array();
+$edited_ids = is_string($_POST['edit_list'] ?? null) ? $parse_place_ids(explode(',', $_POST['edit_list'])) : array();
+
 /* Table to hold osm places details */
 $q = 'CREATE TABLE IF NOT EXISTS `'.osm_place_table.'` (
                 `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -52,48 +96,39 @@ pwg_query($q);
 // |                                edit places                            |
 // +-----------------------------------------------------------------------+
 
-if (isset($_POST['edit_submit']) and isset($_POST['edit_list']))
+if (isset($_POST['edit_submit']) and !empty($edited_ids))
 {
+  $edited_ids_sql = implode(',', $edited_ids);
   $query = '
 SELECT name
   FROM '.osm_place_table.'
-  WHERE id NOT IN ('.$_POST['edit_list'].')
+  WHERE id NOT IN ('.$edited_ids_sql.')
 ;';
   $existing_names = array_from_query($query, 'name');
 
-  $current_name_of = array();
-  $query = '
-SELECT id, name, latitude, longitude
-  FROM '.osm_place_table.'
-  WHERE id IN ('.$_POST['edit_list'].')
-;';
-  $result = pwg_query($query);
-  while ($row = pwg_db_fetch_assoc($result))
-  {
-    $current_name_of[ $row['id'] ] = $row['name'];
-  }
-
   $updates = array();
-  // we must not rename tag with an already existing name
-  foreach (explode(',', $_POST['edit_list']) as $place_id)
+  foreach ($edited_ids as $place_id)
   {
-    $place_name = stripslashes($_POST['place_name-'.$place_id]);
-    $place_lat = stripslashes($_POST['place_lat-'.$place_id]);
-    $place_lon = stripslashes($_POST['place_lon-'.$place_id]);
-
-    if (in_array($place_name, $existing_names))
+    $place = $parse_place(
+      $_POST['place_name-'.$place_id] ?? null,
+      $_POST['place_lat-'.$place_id] ?? null,
+      $_POST['place_lon-'.$place_id] ?? null
+      );
+    if ($place === null)
     {
-        $page['errors'][] = l10n('Place "%s" already exists', $place_name);
+      $page['errors'][] = l10n('Invalid data');
+      continue;
     }
-    else if (!empty($place_name))
+
+    if (in_array($place['name'], $existing_names, true))
     {
-        $updates[] = array(
-          'id' => $place_id,
-          'name' => addslashes($place_name),
-          'latitude' => $place_lat,
-          'longitude' => $place_lon,
-          );
-     }
+      $page['errors'][] = l10n('Place "%s" already exists', htmlspecialchars($place['name'], ENT_QUOTES, 'UTF-8'));
+      continue;
+    }
+
+    $place['id'] = $place_id;
+    $place['name'] = pwg_db_real_escape_string($place['name']);
+    $updates[] = $place;
   }
   mass_updates(
     osm_place_table,
@@ -109,19 +144,20 @@ SELECT id, name, latitude, longitude
 // |                               delete places                           |
 // +-----------------------------------------------------------------------+
 
-if (isset($_POST['delete']) and isset($_POST['places']))
+if (isset($_POST['delete']) and !empty($selected_ids))
 {
+  $selected_ids_sql = implode(',', $selected_ids);
   $query = '
 SELECT name
   FROM '.osm_place_table.'
-  WHERE id IN ('.implode(',', $_POST['places']).')
+  WHERE id IN ('.$selected_ids_sql.')
 ;';
   $place_names = array_from_query($query, 'name');
 
   $query = '
 DELETE
   FROM '.osm_place_table.'
-  WHERE id IN ('.implode(',', $_POST['places']).')
+  WHERE id IN ('.$selected_ids_sql.')
 ;';
   pwg_query($query);
 
@@ -129,16 +165,25 @@ DELETE
     'The following place was deleted', 'The %d following places were deleted',
     count($place_names)
     )
-  .' : '.implode(', ', $place_names);
+  .' : '.htmlspecialchars(implode(', ', $place_names), ENT_QUOTES, 'UTF-8');
 }
 
 // +-----------------------------------------------------------------------+
 // |                               add a place                             |
 // +-----------------------------------------------------------------------+
-if (isset($_POST['add']) and !empty($_POST['add_place']))
+if (isset($_POST['add']))
 {
-  $query = "INSERT INTO `".osm_place_table."` (`name`, `latitude`, `longitude`) VALUE ('". $_POST['add_place'] ."', '". $_POST['add_lat'] ."', '". $_POST['add_lon'] ."');";
-  $result = pwg_query($query);
+  $place = $parse_place($_POST['add_place'] ?? null, $_POST['add_lat'] ?? null, $_POST['add_lon'] ?? null);
+  if ($place === null)
+  {
+    $page['errors'][] = l10n('Invalid data');
+  }
+  else
+  {
+    $query = "INSERT INTO `".osm_place_table."` (`name`, `latitude`, `longitude`) VALUE ('".
+      pwg_db_real_escape_string($place['name'])."', '".$place['latitude']."', '".$place['longitude']."');";
+    pwg_query($query);
+  }
 }
 
 // all places
@@ -158,7 +203,7 @@ $template->assign(
 	)
 );
 
-if (isset($_POST['edit']) and isset($_POST['places']))
+if (isset($_POST['edit']) and !empty($selected_ids))
 {
   $list_name = 'EDIT_PLACES_LIST';
   if (isset($_POST['duplicate']))
@@ -170,12 +215,13 @@ if (isset($_POST['edit']) and isset($_POST['places']))
     $list_name = 'MERGE_TAGS_LIST';
   }
 
-  $template->assign($list_name, implode(',', $_POST['places']));
+  $selected_ids_sql = implode(',', $selected_ids);
+  $template->assign($list_name, $selected_ids_sql);
 
   $query = '
 SELECT id, name, latitude, longitude
   FROM '.osm_place_table.'
-  WHERE id IN ('.implode(',', $_POST['places']).')
+  WHERE id IN ('.$selected_ids_sql.')
 ;';
   $result = pwg_query($query);
   while ($row = pwg_db_fetch_assoc($result))
